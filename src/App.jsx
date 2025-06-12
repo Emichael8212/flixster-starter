@@ -1,9 +1,9 @@
 import { useState, useCallback } from 'react'
 import './App.css'
-import Header from '../Components/Header.jsx'
-import MovieList from '../Components/MovieList.jsx'
-import Footer from '../Components/Footer.jsx'
-import SideBar from '../Components/SideBar.jsx'
+import Header from './components/Header.jsx'
+import MovieList from './components/MovieList.jsx'
+import Footer from './components/Footer.jsx'
+import SideBar from './components/SideBar.jsx'
 
 const App = () => {
 
