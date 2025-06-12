@@ -1,0 +1,32 @@
+.movie-poster {
+    width: 200px;
+    height: 260px;
+}
+
+.card-container {
+    object-fit: fit-content;
+    width: 200px;
+    background-color: white;
+    border: 1px solid #ccc;
+}
+
+
+.rating {
+    display: flex;
+    justify-content: center;
+}
+
+.movie-title {
+    display: flex;
+    justify-content: center;
+
+}
+
+.favorited {
+    cursor: pointer;
+    color: black;
+}
+
+.favorited.active {
+    color: red;
+}

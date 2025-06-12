@@ -1,0 +1,36 @@
+.search-clear {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.search-clear input {
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  width: 250px;
+}
+
+.search-clear button {
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: none;
+  background-color: #368c39;
+  color: white;
+  cursor: pointer;
+}
+
+.search-clear button:hover {
+  background-color: #1a551d;
+}
+
+.search-clear button[type="button"] {
+  background-color: #852019;
+}
+
+.search-clear button[type="button"]:hover {
+  background-color: #4b0a0a;
+}
+.dev-marker {
+    box-shadow: inset 0px 1px 12px #b79630;
+}

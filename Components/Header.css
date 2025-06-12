@@ -1,0 +1,35 @@
+.header-container {
+    background-color: #282c34;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    color: white;
+    padding: 20px;
+    box-shadow: inset 0px 1px 12px #b79630;;
+}
+
+.search-sort-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+}
+
+.header-title {
+    font-size: 1.6rem;
+}
+
+.header-image {
+    transform: scaleX(-1)
+}
+
+.banner {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#sortComponent {
+    margin-left: 50px;
+}

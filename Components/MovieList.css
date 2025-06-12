@@ -1,0 +1,32 @@
+
+
+.loadMore {
+    position: fixed;
+    margin: 20px auto;
+    display: block;
+    width: 120px;
+    padding: 8px 0;
+    background-color: #282c34;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.loadMore:hover {
+    background-color: #3a3f4b;
+}
+
+
+.cardsList-container {
+    background-color: rgb(76, 88, 124);
+    padding: 25px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-content: flex-start;
+    flex-wrap: wrap;
+
+    gap: 25px;
+}
