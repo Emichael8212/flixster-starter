@@ -1,15 +1,6 @@
-.App {
+/* .App {
   text-align: center;
-}
-
-.App-header {
-  background-color: #282c34;
-  display: flex;
   flex-direction: row;
-  align-items: center;
-  justify-content: space-evenly;
-  color: white;
-  padding: 20px;
 }
 
 @media (max-width: 600px) {
@@ -25,4 +16,24 @@
   .search-bar form {
     flex-direction: column;
   }
+} */
+
+.wrapper {
+  display: flex;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  border: solid black;
+  justify-content: flex-start;
+  background-color: #282c34;
+
+}
+.nav-bar{
+  display: flex;
+  flex-direction: column;
+}
+.nav-bar-btn{
+  margin-bottom: 40rem;
 }
