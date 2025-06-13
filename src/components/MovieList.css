@@ -1,9 +1,9 @@
 
 
 .loadMore {
-    position: fixed;
+    position: absolute;
     margin: 20px auto;
-    display: block;
+    display: flex;
     width: 120px;
     padding: 8px 0;
     background-color: #282c34;

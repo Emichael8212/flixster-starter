@@ -1,0 +1,64 @@
+.nav-bar {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 10px;
+    background-color: #282c34;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    height: 100%;
+    box-shadow: inset 0px 1px 12px #b79630;;
+}
+
+.nav-bar-btn {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    margin-bottom: 10px;
+    border: none;
+    border-radius: 6px;
+    background-color: #fff;
+    color: #555;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.nav-bar-btn svg {
+    margin-right: 10px;
+    font-size: 1.1rem;
+}
+
+.nav-bar-btn:hover {
+    background-color: #f1f3f5;
+    transform: translateY(-2px);
+}
+
+.nav-bar-btn.active {
+    background-color: #074624;
+    color: rgb(6, 23, 47);
+}
+
+.nav-bar-btn.active:hover {
+    background-color: #0069d9;
+}
+
+@media (max-width: 768px) {
+    .nav-bar {
+        flex-direction: row;
+        justify-content: space-around;
+        padding: 10px;
+    }
+
+    .nav-bar-btn {
+        margin-bottom: 0;
+        margin-right: 5px;
+        padding: 8px 12px;
+        font-size: 0.9rem;
+    }
+
+    .nav-bar-btn:last-child {
+        margin-right: 0;
+    }
+}

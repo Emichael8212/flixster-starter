@@ -3,34 +3,70 @@ import "./MovieList.css"
 import Moviecard from "./Moviecard"
 import ModalComponent from "./ModalComponent"
 
-function MovieList(
-  { searchQuery, isSearching, setIsSearching, sortState, currentMovies, setCurrentMovies, movies, setMovies, isClearing }) {
-  // const [movies, setMovies] = useState([])
+function MovieList({
+  searchQuery,
+  isSearching,
+  setIsSearching,
+  sortState,
+  currentMovies,
+  setCurrentMovies,
+  movies,
+  setMovies,
+  isClearing,
+  likedMovies,
+  setLikedMovies,
+  watchedMovies,
+  setWatchedMovies,
+  activeView
+}) {
   const [searchResults, setSearchResults] = useState([])
   const [page, setPage] = useState(1)
-
-
 
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [modalData, setModalData] = useState(null)
+  const [movieDetails, setMovieDetails] = useState(null)
 
+
+  const VITE_READ_TOKEN = import.meta.env.VITE_API_KEY
 
   // API options with authorization
-  const VITE_API_READ_ACCESS_TOKEN = import.meta.env.VITE_API_READ_ACCESS_TOKEN
   const apiOptions = {
     method: 'GET',
     headers: {
       accept: 'application/json',
-      Authorization: `Bearer ${VITE_API_READ_ACCESS_TOKEN}`
-    }
-  }
+      Authorization: `Bearer ${VITE_READ_TOKEN}`,
+  }}
 
 
   // Modal functions
-  function openModal(movie) {
+  async function openModal(movie) {
     setModalData(movie)
     setIsModalOpen(true)
+
+    // Fetch additional movie details when modal is opened
+    try {
+      const movieId = movie.id;
+      await fetchMovieDetails(movieId);
+    } catch (error) {
+      console.error("Error fetching movie details:", error);
+    }
+  }
+
+  // Fetch movie details including trailer, runtime, and genres
+  async function fetchMovieDetails(movieId) {
+    try {
+      // Fetch movie details
+      const detailsResponse = await fetch(
+        `https://api.themoviedb.org/3/movie/${movieId}?append_to_response=videos`,
+        apiOptions
+      );
+      const details = await detailsResponse.json();
+      console.log("Movie details fetched:", details);
+      setMovieDetails(details);
+    } catch (error) {
+      console.error("Error fetching movie details:", error);
+    }
   }
 
   function closeModal() {
@@ -64,18 +100,34 @@ function MovieList(
       setIsSearching(false)
       return
     }
-console.log(movies)
-    try {
-      const apiData = await fetch(`https://api.themoviedb.org/3/search/movie?query=${query}&include_adult=false&language=en-US&page=1`, apiOptions)
-      const data = await apiData.json()
-      const results = data.results;
-      setSearchResults(results);
-      setIsSearching(true);
 
-      // Always update currentMovies with search results
-      setCurrentMovies(results);
+    try {
+      console.log("Searching for:", query);
+      console.log("API options:", apiOptions);
+
+      const apiData = await fetch(
+        `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(query)}&include_adult=false&language=en-US&page=1`,
+        apiOptions
+      );
+
+      const data = await apiData.json();
+      console.log("Search results:", data);
+
+      if (data.results && Array.isArray(data.results)) {
+        setSearchResults(data.results);
+        setIsSearching(true);
+        setCurrentMovies(data.results);
+      } else {
+        console.error("Invalid search results format:", data);
+        setSearchResults([]);
+        setIsSearching(true);
+        setCurrentMovies([]);
+      }
     } catch (error) {
-      console.log("Search failed: ", error)
+      console.error("Search failed:", error);
+      setSearchResults([]);
+      setIsSearching(true);
+      setCurrentMovies([]);
     }
   }
 
@@ -97,12 +149,7 @@ console.log(movies)
     }
   }, [searchQuery])
 
-  // Determine which movies to display
-  const displayedMovies = sortState
-    ? currentMovies
-    : (isSearching ? searchResults : movies)
-
-  // Update currentMovies when displayed movies change
+  // Update currentMovies when movies change
   // This ensures sorting always applies to the currently displayed movies
   useEffect(() => {
     if (!sortState && currentMovies.length === 0) {
@@ -110,20 +157,44 @@ console.log(movies)
     }
   }, [isSearching, movies, searchResults, sortState, currentMovies.length, setCurrentMovies]);
 
-  // Create movie card elements
+  // Determine which movies to display based on activeView
+  const getDisplayMovies = () => {
+    if (activeView === 'liked') {
+      return likedMovies;
+    } else if (activeView === 'watched') {
+      return watchedMovies;
+    } else {
+      // Home view - use the normal display logic
+      return sortState ? currentMovies : (isSearching ? searchResults : movies);
+    }
+  };
 
-  const movieCardElements = movies &&  displayedMovies?.map((movie, index) => {
+  // Create movie card elements
+  const displayMovies = getDisplayMovies();
+
+  const movieCardElements = displayMovies?.map((movie, index) => {
     return <Moviecard
               key={index}
               movieElement={movie}
               onClick={() => openModal(movie)}
+              likedMovies={likedMovies}
+              setLikedMovies={setLikedMovies}
+              watchedMovies={watchedMovies}
+              setWatchedMovies={setWatchedMovies}
               />
   })
 
   return (
     <main className="cardsList-container">
-      {movieCardElements}
+      {activeView === 'liked' && likedMovies.length === 0 && (
+        <div className="empty-state">No favorited movies yet. Click the heart icon on movies to add them here.</div>
+      )}
 
+      {activeView === 'watched' && watchedMovies.length === 0 && (
+        <div className="empty-state">No watched movies yet. Click the eye icon on movies to add them here.</div>
+      )}
+
+      {movieCardElements}
 
       {isModalOpen && modalData && (
         <ModalComponent
@@ -133,9 +204,11 @@ console.log(movies)
           rating={modalData.vote_average}
           dateReleased={modalData.release_date}
           closeModal={closeModal}
+          movieDetails={movieDetails}
         />
       )}
-      {!isSearching && page < 15 && (
+
+      {activeView === 'home' && !isSearching && page < 15 && (
         <button onClick={loadMore} className="loadMore">Load More</button>
       )}
     </main>

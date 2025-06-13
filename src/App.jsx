@@ -5,6 +5,7 @@ import MovieList from './components/MovieList.jsx'
 import Footer from './components/Footer.jsx'
 import SideBar from './components/SideBar.jsx'
 
+
 const App = () => {
 
   const [searchQuery, setSearchQuery] = useState('')
@@ -14,12 +15,16 @@ const App = () => {
   const [sortState, setSortState] = useState(false)
   const [currentMovies, setCurrentMovies] = useState([])
   const [movies, setMovies] = useState([])
-  const [page, setPage] = useState(1)
   const [isClearing] = useState(false)
-  
+
+  // Liked and watched movies states
+  const [likedMovies, setLikedMovies] = useState([])
+  const [watchedMovies, setWatchedMovies] = useState([])
+  const [activeView, setActiveView] = useState('home') // 'home', 'liked', or 'watched'
 
   // API options with authorization
-  const VITE_READ_TOKEN = import.meta.env.VITE_API_READ_ACCESS_TOKEN
+  const VITE_READ_TOKEN = import.meta.env.VITE_API_KEY
+
   const apiOptions = {
     method: 'GET',
     headers: {
@@ -59,7 +64,6 @@ const App = () => {
     setIsSearching(false)
     setSortState(false)
     setCurrentMovies([])
-    setPage(1)
 
     // First set movies to empty array
     setMovies([])
@@ -140,7 +144,10 @@ const App = () => {
       />
       <div className='wrapper'>
         <div className='sidebar'>
-          <SideBar />
+          <SideBar
+            setActiveView={setActiveView}
+            activeView={activeView}
+          />
         </div>
         <MovieList
           searchQuery={searchQuery}
@@ -152,7 +159,11 @@ const App = () => {
           movies={movies}
           setMovies={setMovies}
           isClearing={isClearing}
-
+          likedMovies={likedMovies}
+          setLikedMovies={setLikedMovies}
+          watchedMovies={watchedMovies}
+          setWatchedMovies={setWatchedMovies}
+          activeView={activeView}
           />
       </div>
       <Footer />

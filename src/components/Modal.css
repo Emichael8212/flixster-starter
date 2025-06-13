@@ -53,6 +53,37 @@ body.openModal {
   margin-top: 15px;
 }
 
+.modal-info p {
+  margin: 8px 0;
+  line-height: 1.5;
+}
+
+.modal-info .runtime,
+.modal-info .genres,
+.modal-info .date-released,
+.modal-info .rating {
+  font-size: 0.95rem;
+}
+
+.modal-info .overview {
+  margin: 15px 0;
+  line-height: 1.6;
+}
+
+.trailer-container {
+  margin: 20px 0;
+}
+
+.trailer-container h3 {
+  margin-bottom: 10px;
+  font-size: 1.2rem;
+}
+
+.trailer-container iframe {
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
 .close-modal {
   background-color: #e74c3c;
   color: white;
@@ -61,6 +92,7 @@ body.openModal {
   padding: 8px 16px;
   cursor: pointer;
   font-weight: bold;
+  margin-top: 15px;
 }
 
 .close-modal:hover {
@@ -98,5 +130,9 @@ body.openModal {
 @media (max-width: 768px) {
   .modal-card {
     width: 95%;
+  }
+
+  .trailer-container iframe {
+    height: 180px;
   }
 }

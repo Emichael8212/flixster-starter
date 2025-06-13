@@ -1,48 +1,84 @@
-import { useState } from "react";
-import "./Moviecard.css"
+import { useState, useEffect } from "react";
+import "./Moviecard.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHeart, faEye } from '@fortawesome/free-solid-svg-icons';
+
+export default function Moviecard({
+    movieElement,
+    onClick,
+    likedMovies,
+    setLikedMovies,
+    watchedMovies,
+    setWatchedMovies
+}) {
+    const [isLiked, setIsLiked] = useState(false);
+    const [isWatched, setIsWatched] = useState(false);
+
+    // Check if movie is in liked or watched arrays on component mount
+    useEffect(() => {
+        if (likedMovies) {
+            const movieIsLiked = likedMovies.some(movie => movie.id === movieElement.id);
+            setIsLiked(movieIsLiked);
+        }
+
+        if (watchedMovies) {
+            const movieIsWatched = watchedMovies.some(movie => movie.id === movieElement.id);
+            setIsWatched(movieIsWatched);
+        }
+    }, [likedMovies, watchedMovies, movieElement.id]);
+
+    // Toggle like status
+    function toggleLike(e) {
+        e.stopPropagation();
+
+        if (isLiked) {
+            // Remove from liked movies
+            setLikedMovies(prev => prev.filter(movie => movie.id !== movieElement.id));
+        } else {
+            // Add to liked movies
+            setLikedMovies(prev => [...prev, movieElement]);
+        }
+
+        setIsLiked(!isLiked); }
 
 
-export default function Moviecard({ movieElement, onClick}) {
+    // Toggle watched status
+    function toggleWatched(e) {
+        e.stopPropagation();
 
+        if (isWatched) {
+            // Remove from watched movies
+            setWatchedMovies(prev => prev.filter(movie => movie.id !== movieElement.id));
+        } else {
+            // Add to watched movies
+            setWatchedMovies(prev => [...prev, movieElement]);
+        }
 
-    // const [iconClick, setClickIcon] = useState(false)
-    // const [iconreaction, setIconReaction] = useState('black')
-
-    // function iconClick(e) {
-    //     e.stopPropagation()
-
-    //     setClickIcon(!clickIcon)
-    //     setIconReaction(clickIcon ? 'black': 'yellow')
-    // }
-
+        setIsWatched(!isWatched);
+    }
 
     return (
         <div className="card-container" onClick={onClick}>
-            <div holder="movieImageCard">
+            <div className="movieImageCard">
                 <img className="movie-poster"
                     src={`https://image.tmdb.org/t/p/w500${movieElement.poster_path}`}
                     alt={movieElement.title}
                 />
-                {/* <span onClick={(e)=>{ iconClick(e)}} className="favorited">{clickon}</span> */}
-                <span onClick={(e)=>{ iconClick(e)}} className="watched">{`♾`}</span>
+                <span
+                    onClick={toggleLike}
+                    className={`favorited ${isLiked ? 'active' : ''}`}
+                >
+                    <FontAwesomeIcon icon={faHeart} />
+                </span>
+                <span
+                    onClick={toggleWatched}
+                    className={`watched ${isWatched ? 'active' : ''}`}
+                >
+                    <FontAwesomeIcon icon={faEye} />
+                </span>
                 <p className="movie-title">{movieElement.title}</p>
                 <p className="rating">{`Rating: ${movieElement.vote_average}`}</p>
             </div>
         </div>
     )
 }
-
-
-
-/**
-Use npm install @fortawesome/fontawesome-svg-core @fortawesome/react-fontawesome @fortawesome/free-solid-svg-icons.
-If you need brand icons, also install @fortawesome/free-brands-svg-icons.
-If you plan to use Font Awesome Pro, you'll need to install the appropriate packages for solid, regular, and light styles.
-2. Import FontAwesomeIcon and Icons:
-In your React component, import FontAwesomeIcon from @fortawesome/react-fontawesome.
-Import the specific icons you need from @fortawesome/free-solid-svg-icons, @fortawesome/free-brands-svg-icons, etc.
-3. Use the FontAwesomeIcon Component:
-Use the <FontAwesomeIcon> component and pass the icon prop, which should be an object representing the imported icon.
-Example: <FontAwesomeIcon icon={faCoffee} />
-**/

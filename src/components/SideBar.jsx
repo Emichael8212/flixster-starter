@@ -1,17 +1,28 @@
-import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHome, faHeart, faEye } from '@fortawesome/free-solid-svg-icons';
+import './SideBar.css';
 
-export default function SideBar() {
+export default function SideBar({ setActiveView, activeView }) {
     return (
         <nav className='nav-bar'>
-            {/* <div className='nav-buttons'> */}
-            <button className='nav-bar-btn'>
-                    Favorited
+            <button
+                className={`nav-bar-btn ${activeView === 'home' ? 'active' : ''}`}
+                onClick={() => setActiveView('home')}
+            >
+                <FontAwesomeIcon icon={faHome} /> Home
             </button>
-            <button>
-                    Watched Movies
+            <button
+                className={`nav-bar-btn ${activeView === 'liked' ? 'active' : ''}`}
+                onClick={() => setActiveView('liked')}
+            >
+                <FontAwesomeIcon icon={faHeart} /> Favorited
             </button>
-            {/* </div> */}
+            <button
+                className={`nav-bar-btn ${activeView === 'watched' ? 'active' : ''}`}
+                onClick={() => setActiveView('watched')}
+            >
+                <FontAwesomeIcon icon={faEye} /> Watched Movies
+            </button>
         </nav>
     )
 }
