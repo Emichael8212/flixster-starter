@@ -3,34 +3,20 @@ import "./MovieList.css"
 import Moviecard from "./Moviecard"
 import ModalComponent from "./ModalComponent"
 
-function MovieList({
-  searchQuery,
-  isSearching,
-  setIsSearching,
-  sortState,
-  currentMovies,
-  setCurrentMovies,
-  movies,
-  setMovies,
-  isClearing,
-  likedMovies,
-  setLikedMovies,
-  watchedMovies,
-  setWatchedMovies,
-  activeView
-}) {
+export default function MovieList({ searchQuery, isSearching, setIsSearching, sortState,
+  currentMovies, setCurrentMovies, movies, setMovies, isClearing, likedMovies,
+  setLikedMovies, watchedMovies, setWatchedMovies, activeView }) {
   const [searchResults, setSearchResults] = useState([])
   const [page, setPage] = useState(1)
 
-  // Modal State
+  // the state for the modal
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [modalData, setModalData] = useState(null)
   const [movieDetails, setMovieDetails] = useState(null)
 
 
+  // API options
   const VITE_READ_TOKEN = import.meta.env.VITE_API_KEY
-
-  // API options with authorization
   const apiOptions = {
     method: 'GET',
     headers: {
@@ -62,7 +48,6 @@ function MovieList({
         apiOptions
       );
       const details = await detailsResponse.json();
-      console.log("Movie details fetched:", details);
       setMovieDetails(details);
     } catch (error) {
       console.error("Error fetching movie details:", error);
@@ -73,14 +58,11 @@ function MovieList({
     setIsModalOpen(false)
   }
 
-
-  console.log('movies from movielist', movies)
   // Fetch now playing movies
   async function fetchNowPlayingMovies(pageNum) {
     try {
       const apiData = await fetch(`https://api.themoviedb.org/3/movie/now_playing?page=${pageNum}`, apiOptions)
       const data = await apiData.json()
-      console.log('data from movielist', data)
 
       const newMovies = [...movies, ...data.results];
       setMovies(newMovies);
@@ -111,8 +93,6 @@ function MovieList({
       );
 
       const data = await apiData.json();
-      console.log("Search results:", data);
-
       if (data.results && Array.isArray(data.results)) {
         setSearchResults(data.results);
         setIsSearching(true);
@@ -149,8 +129,7 @@ function MovieList({
     }
   }, [searchQuery])
 
-  // Update currentMovies when movies change
-  // This ensures sorting always applies to the currently displayed movies
+  // Update currentMovies when movies change to sort dynamically
   useEffect(() => {
     if (!sortState && currentMovies.length === 0) {
       setCurrentMovies(isSearching ? searchResults : movies);
@@ -164,12 +143,12 @@ function MovieList({
     } else if (activeView === 'watched') {
       return watchedMovies;
     } else {
-      // Home view - use the normal display logic
+
       return sortState ? currentMovies : (isSearching ? searchResults : movies);
     }
   };
 
-  // Create movie card elements
+  // dynmamic rendering of the movie card elements
   const displayMovies = getDisplayMovies();
 
   const movieCardElements = displayMovies?.map((movie, index) => {
@@ -185,13 +164,14 @@ function MovieList({
   })
 
   return (
-    <main className="cardsList-container">
+    <main className="hold">
+      <div className="cardsList-container">
       {activeView === 'liked' && likedMovies.length === 0 && (
-        <div className="empty-state">No favorited movies yet. Click the heart icon on movies to add them here.</div>
+        <div className="empty-state">{<img src="movie.png" />}</div>
       )}
 
       {activeView === 'watched' && watchedMovies.length === 0 && (
-        <div className="empty-state">No watched movies yet. Click the eye icon on movies to add them here.</div>
+        <div className="empty-state">{<img src="movie.png" />}</div>
       )}
 
       {movieCardElements}
@@ -207,15 +187,11 @@ function MovieList({
           movieDetails={movieDetails}
         />
       )}
-
-      {activeView === 'home' && !isSearching && page < 15 && (
-        <button onClick={loadMore} className="loadMore">Load More</button>
-      )}
+      </div>
+        {activeView === 'home' && !isSearching && page < 15 && (
+          <button onClick={loadMore} className="loadMore">Load More</button>
+        )}
+      <div></div>
     </main>
   )
 }
-// export the Movielist so I can use it on another component
-export default MovieList
-
-
-// to import the movie trailers hook the movie youtube id and calll to the nextor

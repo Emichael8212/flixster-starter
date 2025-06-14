@@ -1,24 +1,17 @@
 import React from "react";
 import "./Modal.css";
 
-export default function ModalComponent({
-  title,
-  image,
-  content,
-  dateReleased,
-  rating,
-  closeModal,
-  movieDetails
-}) {
-  // Handle clicks on the modal overlay
+export default function ModalComponent({ title, image, content, dateReleased,
+  rating, closeModal, movieDetails }) {
+
+  // Handle clicks function for the modal overlay
   const handleOutsideClick = (event) => {
-    // Only close if clicking directly on the overlay, not its children
     if (event.target.className === "modal-overlay") {
       closeModal();
     }
   };
 
-  // Format runtime from minutes to hours and minutes
+  // I initatied this function to format the runtime to hours and minutes
   const formatRuntime = (minutes) => {
     if (!minutes) return "";
     const hours = Math.floor(minutes / 60);
@@ -32,16 +25,14 @@ export default function ModalComponent({
       return null;
     }
 
-    // Find official trailer or use the first video
+    // return the first trailer seen
     const trailer = movieDetails.videos.results.find(
       (video) => video.type === "Trailer" && video.site === "YouTube"
     ) || movieDetails.videos.results[0];
-
     return trailer;
   };
 
   const trailer = getTrailer();
-
   return (
     <div className="modal-overlay" onClick={handleOutsideClick}>
       <article className="modal-card">
@@ -79,9 +70,7 @@ export default function ModalComponent({
                 {movieDetails.genres.map(genre => genre.name).join(", ")}
               </p>
             )}
-
             <p className="overview">{content}</p>
-
             {trailer && (
               <div className="trailer-container">
                 <h3>Trailer</h3>
@@ -96,7 +85,6 @@ export default function ModalComponent({
                 ></iframe>
               </div>
             )}
-
             <button className="close-modal" onClick={closeModal}>
               Close
             </button>

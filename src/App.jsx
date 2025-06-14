@@ -5,8 +5,7 @@ import MovieList from './components/MovieList.jsx'
 import Footer from './components/Footer.jsx'
 import SideBar from './components/SideBar.jsx'
 
-
-const App = () => {
+export default function App() {
 
   const [searchQuery, setSearchQuery] = useState('')
   const [isSearching, setIsSearching] = useState(false)
@@ -20,11 +19,10 @@ const App = () => {
   // Liked and watched movies states
   const [likedMovies, setLikedMovies] = useState([])
   const [watchedMovies, setWatchedMovies] = useState([])
-  const [activeView, setActiveView] = useState('home') // 'home', 'liked', or 'watched'
+  const [activeView, setActiveView] = useState('home') // for my 'home', 'liked', or 'watched'
 
   // API options with authorization
   const VITE_READ_TOKEN = import.meta.env.VITE_API_KEY
-
   const apiOptions = {
     method: 'GET',
     headers: {
@@ -33,16 +31,13 @@ const App = () => {
         `Bearer ${VITE_READ_TOKEN}`
     }
   }
-
-
-
+  // Initiating the fetch for now playing movies
   const fetchNowPlayingMovies = async(pageNum = 1)=> {
     try {
       const apiData = await fetch(`https://api.themoviedb.org/3/movie/now_playing?page=${pageNum}`, apiOptions)
       const data = await apiData.json()
-      console.log('movie from home function',data.results)
 
-      // If we're clearing, don't spread the existing movies array
+      // If I'm clearing, don't spread the existing movies array
       const newMovies = pageNum === 1 ? [...data.results] : [...movies, ...data.results];
       setMovies(newMovies);
 
@@ -72,7 +67,7 @@ const App = () => {
     fetchNowPlayingMovies(1)
   }
 
-  // Sorting functions
+  // My Sorting functions by different orders
   const byAlphabeticOrder = (a, b) => {
     return a.title.localeCompare(b.title)
   }
@@ -138,7 +133,6 @@ const App = () => {
         sortHandlers={sortHandlers}
         setCurrentMovies={setCurrentMovies}
         currentMovies={currentMovies}
-        // fetchNowPlayingMovies={fetchNowPlayingMovies}
         movies={movies}
         setMovies={setMovies}
       />
@@ -170,5 +164,3 @@ const App = () => {
     </>
   )
 }
-
-export default App

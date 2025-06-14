@@ -33,3 +33,13 @@
 #sortComponent {
     margin-left: 50px;
 }
+
+@media (max-width: 600px) {
+    .header-container {
+        flex-direction: column;
+    }
+
+    .search-sort-container {
+        display: flex;
+        flex-direction: column;}
+}
