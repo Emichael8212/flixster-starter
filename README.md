@@ -5,7 +5,7 @@
 
 Submitted by: Emmanuel Chukwuemetam Michael
 
-Estimated time spent: 15hours hours spent in total
+Estimated time spent: 30hours hours spent in total
 
 Deployed Application (**required**): [Flixster Deployed Site](https://jarvis-flixster-starter.onrender.com)
 
